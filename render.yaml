@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: fake-news-media-credibility
+    runtime: python
+    plan: free
+    branch: main
+
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+
+    startCommand: gunicorn koti:app --bind 0.0.0.0:$PORT --workers 1 --threads 4
+
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+
+      - key: TRANSFORMERS_CACHE
+        value: /tmp/transformers
+
+      - key: HF_HOME
+        value: /tmp/huggingface
+
+      - key: TORCH_HOME
+        value: /tmp/torch
+
+      - key: PYTHONUNBUFFERED
+        value: "1"
